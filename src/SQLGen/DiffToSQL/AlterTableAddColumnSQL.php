@@ -8,17 +8,18 @@ class AlterTableAddColumnSQL implements SQLGenInterface {
     function __construct($obj) {
         $this->obj = $obj;
     }
-    
+
     public function getUp() {
         $table = $this->obj->table;
         $schema = $this->obj->diff->getNewValue();
-        return "ALTER TABLE `$table` ADD $schema;";
+        $after = $this->obj->after;
+        return "ADD $schema " . ($after ? "AFTER `$after`" : 'FIRST');
     }
 
     public function getDown() {
         $table = $this->obj->table;
         $column = $this->obj->column;
-        return "ALTER TABLE `$table` DROP `$column`;";
+        return "DROP `$column`";
     }
 
 }

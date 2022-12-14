@@ -7,11 +7,12 @@ use DBDiff\Logger;
 
 class SQLGenerator implements SQLGenInterface {
 
-    function __construct($diff) {
+    function __construct($diff, $params) {
         $this->diffSorter = new DiffSorter;
         $this->diff = array_merge($diff['schema'], $diff['data']);
+        $this->params = $params;
     }
-    
+
     public function getUp() {
         Logger::info("Now generating UP migration");
         $diff = $this->diffSorter->sort($this->diff, 'up');

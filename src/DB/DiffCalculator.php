@@ -8,37 +8,47 @@ use DBDiff\DB\Data\TableData;
 
 class DiffCalculator {
 
-    function __construct() {
-        $this->manager = new DBManager;
+    function __construct($params) {
+        $this->manager = new DBManager($params);
+        $this->params = $params;
     }
-    
-    public function getDiff($params) {
-        
+
+    public function getDiff() {
         // Connect and test accessibility
-        $this->manager->connect($params);
-        $this->manager->testResources($params);
+        $this->manager->connect();
+        $this->manager->testResources();
+
+        $schemaDiff = [];
+        $dataDiff = [];
 
         // Schema diff
-        $schemaDiff = [];
-        if ($params->type !== 'data') {
-            if ($params->input['kind'] === 'db') {
-                $dbSchema = new DBSchema($this->manager);
-                $schemaDiff = $dbSchema->getDiff();
+        if ($this->params->type === 'schema') {
+            if ($this->params->input['kind'] === 'db') {
+                $dbSchema = new DBSchema($this->manager, $this->params);
+                $schemaDiff = $dbSchema->getDiff($this->params);
             } else {
-                $tableSchema = new TableSchema($this->manager);
-                $schemaDiff = $tableSchema->getDiff($params->input['source']['table']);
+                $tableSchema = new TableSchema($this->manager, $this->params);
+                $schemaDiff = $tableSchema->getDiff($this->params->input['source']['table']);
             }
         }
-
-        // Data diff
-        $dataDiff = [];
-        if ($params->type !== 'schema') {
-            if ($params->input['kind'] === 'db') {
-                $dbData = new DBData($this->manager);
+        // New Data diff
+        else if ($this->params->type === 'newdata') {
+            $this->params->newDataOnly = true;
+            if ($this->params->input['kind'] === 'db') {
+                $dbData = new DBData($this->manager, $this->params);
                 $dataDiff = $dbData->getDiff();
             } else {
-                $tableData = new TableData($this->manager);
-                $dataDiff = $tableData->getDiff($params->input['source']['table']);
+                $tableData = new TableData($this->manager, $this->params);
+                $dataDiff = $tableData->getDiff($this->params->input['source']['table']);
+            }
+        }
+        else if ($this->params->type === 'fulldata') {
+            if ($this->params->input['kind'] === 'db') {
+                $dbData = new DBData($this->manager, $this->params);
+                $dataDiff = $dbData->getDiff();
+            } else {
+                $tableData = new TableData($this->manager, $this->params);
+                $dataDiff = $tableData->getDiff($this->params->input['source']['table']);
             }
         }
 

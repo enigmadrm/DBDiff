@@ -1,24 +1,18 @@
 <?php namespace DBDiff\DB\Schema;
 
-use Diff\Differ\ListDiffer;
-
-use DBDiff\Params\ParamsFactory;
 use DBDiff\Diff\SetDBCollation;
 use DBDiff\Diff\SetDBCharset;
 use DBDiff\Diff\DropTable;
 use DBDiff\Diff\AddTable;
-use DBDiff\Diff\AlterTable;
-
-
 
 class DBSchema {
 
-    function __construct($manager) {
+    function __construct($manager, $params) {
         $this->manager = $manager;
+        $this->params = $params;
     }
-    
+
     function getDiff() {
-        $params = ParamsFactory::get();
 
         $diffs = [];
 
@@ -36,16 +30,16 @@ class DBSchema {
         if ($sourceCharset !== $targetCharset) {
             $diffs[] = new SetDBCharset($dbName, $sourceCharset, $targetCharset);
         }
-        
+
         // Tables
-        $tableSchema = new TableSchema($this->manager);
+        $tableSchema = new TableSchema($this->manager, $this->params);
 
         $sourceTables = $this->manager->getTables('source');
         $targetTables = $this->manager->getTables('target');
 
-        if (isset($params->tablesToIgnore)) {
-            $sourceTables = array_diff($sourceTables, $params->tablesToIgnore);
-            $targetTables = array_diff($targetTables, $params->tablesToIgnore);
+        if (isset($this->params->tablesToIgnore)) {
+            $sourceTables = array_diff($sourceTables, $this->params->tablesToIgnore);
+            $targetTables = array_diff($targetTables, $this->params->tablesToIgnore);
         }
 
         $addedTables = array_diff($sourceTables, $targetTables);
@@ -69,7 +63,7 @@ class DBSchema {
 
     protected function getDBVariable($connection, $var) {
         $result = $this->manager->getDB($connection)->select("show variables like '$var'");
-        return $result[0]['Value'];
+        return $result[0]->Value;
     }
 
 }

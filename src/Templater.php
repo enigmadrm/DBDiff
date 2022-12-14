@@ -11,7 +11,7 @@ class Templater {
         $this->up = $up;
         $this->down = $down;
     }
-    
+
     public function output() {
         $content = $this->getComments();
         $content .= $this->getContent();
@@ -35,8 +35,8 @@ class Templater {
         $compiler = new BladeCompiler(new Filesystem, ".");
         $template = $this->getTemplate();
         $compiled = $compiler->compileString(' ?>'.$template);
-        $up = trim($this->up, "\n");
-        $down = trim($this->down, "\n");
+        $up = is_array($this->up) ? implode("", $this->up) : trim($this->up, "\n");
+        $down = is_array($this->down) ? implode("", $this->down) : trim($this->down, "\n");
         ob_start();
         eval($compiled);
         $content = ob_get_contents();

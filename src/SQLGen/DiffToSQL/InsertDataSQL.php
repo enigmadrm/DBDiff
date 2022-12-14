@@ -8,7 +8,7 @@ class InsertDataSQL implements SQLGenInterface {
     function __construct($obj) {
         $this->obj = $obj;
     }
-    
+
     public function getUp() {
         $table = $this->obj->table;
         $values = $this->obj->diff['diff']->getNewValue();
@@ -20,7 +20,7 @@ class InsertDataSQL implements SQLGenInterface {
                 return 'NULL';
             }
         }, $values);
-        return "INSERT INTO `$table` VALUES(".implode(',', $values).");";
+        return "INSERT INTO `$table` VALUES(".implode(',', $values).")";
     }
 
     public function getDown() {
@@ -30,7 +30,7 @@ class InsertDataSQL implements SQLGenInterface {
             $value = '`'.$column."` = '".addslashes($value)."'";
         });
         $condition = implode(' AND ', $keys);
-        return "DELETE FROM `$table` WHERE $condition;";
+        return "DELETE FROM `$table` WHERE $condition";
     }
 
 }

@@ -2,7 +2,7 @@
 
 
 class DefaultParams {
-    
+
     // Specify the source db connection details. If there is only one
     public $server1 = [];
 
@@ -20,13 +20,13 @@ class DefaultParams {
     // Specified whether to include the up, down or both data in the output
     public $include = 'up';
 
-    /* 
+    /*
      By default automated comments starting with the hash (#) character are
      included in the output file, which can be removed with this parameter
     */
     public $nocomments = false;
 
-    /* 
+    /*
      By default, DBDiff will look for a .dbdiff file in the current directory
      which is valid YAML, which may also be overridden with a config file that
      lists the database host, user, port and password of the source and target
@@ -36,21 +36,34 @@ class DefaultParams {
     */
     public $config = null;
 
-    /* 
+    /*
      By default will output to the same directory the command is run in if no directory is
      specified. If a directory is specified, it should exist, otherwise an error will be thrown
     */
     public $output = null;
 
-    /* 
+    /*
      Enable or disable warnings
     */
     public $debug = false;
 
     /*
-     The penultimate parameter is what to compare: db1.table1:db2.table3 or​ db1:db2 
+     The penultimate parameter is what to compare: db1.table1:db2.table3 or​ db1:db2
      This tool can compare just one table or all tables (entire db) from the database
     */
     public $input = [];
+
+    // Suppress logging output
+    public $quiet = false;
+
+    /*
+     Only pull the newest data from source to dest
+    */
+    public $newDataOnly = false;
+
+    /*
+     Limit to this number of schema queries or data queries per run
+    */
+    public $limit = null;
 
 }

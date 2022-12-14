@@ -60,10 +60,22 @@ class DiffSorter {
     ];
 
     public function sort($diff, $type) {
-        usort($diff, [$this, 'compare'.ucfirst($type)]);
-        return $diff;
+        $tableDiffs = [];
+        foreach ($diff as $item) {
+            if (isset($item->table)) {
+                if (!isset($tableDiffs[$item->table])) {
+                    $tableDiffs[$item->table] = [];
+                }
+                $tableDiffs[$item->table][] = $item;
+            }
+        }
+        foreach ($tableDiffs as $table => $diffs) {
+            usort($diffs, [$this, 'compare'.ucfirst($type)]);
+            $tableDiffs[$table] = $diffs;
+        }
+        return $tableDiffs;
     }
-    
+
     private function compareUp($a, $b) {
         return $this->compare($this->up_order, $a, $b);
     }
@@ -80,8 +92,19 @@ class DiffSorter {
         $sqlGenClassB = $reflectionB->getShortName();
         $indexA = $order[$sqlGenClassA];
         $indexB = $order[$sqlGenClassB];
-        
-        if ($indexA === $indexB) return 0;
+
+        if ($indexA === $indexB) {
+            if (isset($a->position) && isset($b->position)) {
+                if ($a->position > $b->position) {
+                    return 1;
+                } else if ($b->position < $a->position) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+            return 0;
+        }
         else if ($indexA > $indexB) return 1;
         return -1;
     }
