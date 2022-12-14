@@ -114,8 +114,8 @@ Congratulations you have installed and ran DBDiff!
 
 ###### Note: The command-line parameters will always override the settings in the `.dbdiff` config file
 
--   **--server1=user:password|host1:port** - Specify the source db connection details. If there is only one server the --server1 flag can be omitted
--   **--server2=user:password|host2:port** - Specify the target db connection details (if it’s different to server1)
+-   **--server1=user:password__host1:port** - Specify the source db connection details. If there is only one server the --server1 flag can be omitted
+-   **--server2=user:password__host2:port** - Specify the target db connection details (if it’s different to server1)
 -   **--template=templates/simple-db-migrate.tmpl** - Specifies the output template, if any. By default will be plain SQL
 -   **--type=schema** or **data** or **all** - Specifies the type of diff to do either on the schema, data or both. schema is the default
 -   **--include=up** or **down** or **all** - Specified whether to include the up, down or both data in the output. up is the default
