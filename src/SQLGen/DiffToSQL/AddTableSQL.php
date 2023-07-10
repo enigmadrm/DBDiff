@@ -18,6 +18,6 @@ class AddTableSQL implements SQLGenInterface {
 
     public function getDown() {
         $table = $this->obj->table;
-        return "DROP TABLE `$table`;";
+        return "DROP TABLE `$table`";
     }
 }
