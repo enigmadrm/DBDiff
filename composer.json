@@ -9,15 +9,15 @@
         }
     },
     "require": {
-        "aura/cli": "*",
-        "symfony/yaml": "*",
-        "illuminate/database": "*",
-        "illuminate/view": "*",
-        "illuminate/container": "*",
-        "diff/diff": "*"
+        "aura/cli": ">=2.2.0",
+        "symfony/yaml": ">=3.4.47",
+        "illuminate/database": ">=8.0.0",
+        "illuminate/view": ">=8.0.0",
+        "illuminate/container": ">=8.0.0",
+        "diff/diff": "3.3.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8.*@dev"
+        "phpunit/phpunit": ">=5.0.0"
     },
     "scripts": {
         "post-install-cmd": "scripts/post-install.sh",
