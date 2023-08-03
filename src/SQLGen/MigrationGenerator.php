@@ -4,7 +4,7 @@
 class MigrationGenerator {
 
     public static function generate($tableDiffs, $method) {
-        $sql = ["SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0\n\n"];
+        $sql = ["SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;\n\n"];
         foreach ($tableDiffs as $table => $diffs) {
             $alterArray = [];
             foreach ($diffs as $diff) {
